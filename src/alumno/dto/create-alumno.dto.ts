@@ -1,1 +1,2 @@
-export class CreateAlumnoDto {}
+export class CreateAlumnoDto {
+}

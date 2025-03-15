@@ -9,6 +9,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
   providers: [CarreraService],
   imports: [
     TypeOrmModule.forFeature([Carrera])
-  ]
+  ],
+  exports: [CarreraService],
 })
 export class CarreraModule {}

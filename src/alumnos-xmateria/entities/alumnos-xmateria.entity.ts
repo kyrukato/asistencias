@@ -14,10 +14,4 @@ export class AlumnosXmateria {
     )
     id_MateriaXGrupo:MateriaXgrupo;
 
-    @OneToOne(
-        () => Alumno,
-        (alumno) => alumno.id,
-        {onDelete:'CASCADE',onUpdate:'CASCADE'}
-    )
-    id_Alumno:Alumno
 }

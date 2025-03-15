@@ -7,7 +7,7 @@ import { UpdatePlanDto } from './dto/update-plan.dto';
 export class PlanController {
   constructor(private readonly planService: PlanService) {}
 
-  @Post()
+  @Post('create')
   create(@Body() createPlanDto: CreatePlanDto) {
     return this.planService.create(createPlanDto);
   }
@@ -19,7 +19,7 @@ export class PlanController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.planService.findOne(+id);
+    return this.planService.findOne(id);
   }
 
   @Patch(':id')

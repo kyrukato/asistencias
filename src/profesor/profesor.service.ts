@@ -1,11 +1,19 @@
 import { Injectable } from '@nestjs/common';
 import { CreateProfesorDto } from './dto/create-profesor.dto';
 import { UpdateProfesorDto } from './dto/update-profesor.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Profesor } from './entities/profesor.entity';
+import { DataSource, Repository } from 'typeorm';
 
 @Injectable()
 export class ProfesorService {
+  constructor(
+    private readonly dataSource:DataSource,
+    @InjectRepository(Profesor)
+    private readonly profesorReposiroty:Repository<Profesor>,
+  ){}
   create(createProfesorDto: CreateProfesorDto) {
-    return 'This action adds a new profesor';
+    this.profesorReposiroty.create(createProfesorDto);
   }
 
   findAll() {

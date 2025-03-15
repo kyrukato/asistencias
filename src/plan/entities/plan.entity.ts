@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryColumn } from "typeorm";
+import { Carrera } from "src/carrera/entities/carrera.entity";
+import { Column, Entity, OneToMany, PrimaryColumn } from "typeorm";
 
 @Entity('plan')
 export class Plan {
@@ -7,4 +8,16 @@ export class Plan {
 
     @Column('text')
     descripcion:string;
+
+    @Column("bool",{
+        default: true,
+    })
+    active:boolean;
+
+    @OneToMany(
+        () => Carrera,
+        (carrera) => carrera.plan,
+        {onDelete:'CASCADE',onUpdate:'CASCADE'}
+    )
+    carrera:Carrera[];
 }

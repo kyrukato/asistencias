@@ -14,7 +14,7 @@ export class Materia {
         (carrera) => carrera.id,
         {onUpdate:'CASCADE'}
     )
-    id_carrera:Carrera;
+    carrera:Carrera;
 
     @Column('integer')
     creditos:number;

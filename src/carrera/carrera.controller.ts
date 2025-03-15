@@ -7,7 +7,7 @@ import { UpdateCarreraDto } from './dto/update-carrera.dto';
 export class CarreraController {
   constructor(private readonly carreraService: CarreraService) {}
 
-  @Post()
+  @Post('create')
   create(@Body() createCarreraDto: CreateCarreraDto) {
     return this.carreraService.create(createCarreraDto);
   }

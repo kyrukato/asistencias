@@ -14,6 +14,8 @@ import { MateriaXgrupoModule } from './materia-xgrupo/materia-xgrupo.module';
 import { AlumnosXmateriaModule } from './alumnos-xmateria/alumnos-xmateria.module';
 import { AlumnosXgrupoModule } from './alumnos-xgrupo/alumnos-xgrupo.module';
 import { AsistenciasModule } from './asistencias/asistencias.module';
+import { AuthModule } from './auth/auth.module';
+import { AppService } from './app.service';
 
 @Module({
   imports: [
@@ -37,8 +39,9 @@ import { AsistenciasModule } from './asistencias/asistencias.module';
     AlumnosXmateriaModule,
     AlumnosXgrupoModule,
     AsistenciasModule,
+    AuthModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [AppService],
 })
 export class AppModule {}

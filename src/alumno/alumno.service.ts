@@ -1,11 +1,21 @@
 import { Injectable } from '@nestjs/common';
 import { CreateAlumnoDto } from './dto/create-alumno.dto';
 import { UpdateAlumnoDto } from './dto/update-alumno.dto';
+import { DataSource, Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Alumno } from './entities/alumno.entity';
+import { privateDecrypt } from 'crypto';
 
 @Injectable()
 export class AlumnoService {
+  constructor(
+    private readonly dataSourse:DataSource,
+    @InjectRepository(Alumno)
+    private readonly alumnoRepository:Repository<Alumno>,
+  ){}
+  
   create(createAlumnoDto: CreateAlumnoDto) {
-    return 'This action adds a new alumno';
+    this.alumnoRepository.save(createAlumnoDto);
   }
 
   findAll() {

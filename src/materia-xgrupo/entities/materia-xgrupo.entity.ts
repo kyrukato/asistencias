@@ -27,7 +27,7 @@ export class MateriaXgrupo {
 
     @OneToOne(
         () => Profesor,
-        (profesor) => profesor.id,
+        (profesor) => profesor.noEmpleado,
         {onDelete:'CASCADE',onUpdate:'CASCADE'}
     )
     id_Profesor:Profesor;

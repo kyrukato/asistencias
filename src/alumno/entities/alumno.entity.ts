@@ -5,7 +5,7 @@ import { Column, Entity, ManyToMany, ManyToOne, OneToOne, PrimaryColumn } from "
 @Entity('Alumnos')
 export class Alumno {
     @PrimaryColumn('integer')
-    id:number;
+    NoControl:number;
 
     @Column('text')
     nombre:string;
@@ -16,17 +16,17 @@ export class Alumno {
     @Column('text')
     apellidoMaterno:string;
 
-    @OneToOne(
+    @ManyToOne(
         () => Carrera,
-        (id_carrera) => id_carrera.id,
+        (carrera) => carrera.id,
         {onDelete: 'CASCADE'}
     )
-    id_carrera:Carrera;
+    carrera:Carrera;
 
-    @OneToOne(
+    @ManyToOne(
         () => User,
-        (id_user) => id_user.id,
+        (user) => user.id,
         {onDelete: 'CASCADE'}
     )
-    id_user:User;
+    user:User;
 }

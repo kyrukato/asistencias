@@ -1,5 +1,7 @@
 import { Alumno } from "src/alumno/entities/alumno.entity";
-import { Column, Entity, OneToMany, OneToOne, PrimaryColumn } from "typeorm";
+import { Materia } from "src/materia/entities/materia.entity";
+import { Plan } from "src/plan/entities/plan.entity";
+import { Column, Entity, ManyToOne, OneToMany, OneToOne, PrimaryColumn } from "typeorm";
 
 @Entity('Carreras')
 export class Carrera {
@@ -9,10 +11,29 @@ export class Carrera {
     @Column('text')
     nombre:string;
 
-    @OneToOne(
+    @Column("bool",{
+        default: true
+    })
+    activa:boolean
+
+    @ManyToOne(
+        () => Plan,
+        (plan) => plan.id,
+        {onDelete:'CASCADE',onUpdate:'CASCADE'}
+    )
+    plan:Plan;
+
+    @OneToMany(
         ()=> Alumno,
-        (alumnos) => alumnos.id_carrera,
+        (alumnos) => alumnos.carrera,
         {onUpdate: "CASCADE"}
     )
-    alumnos:Alumno;
+    alumnos:Alumno[];
+
+    @OneToMany(
+        () => Materia,
+        (materia) => materia.carrera,
+        {onUpdate:'CASCADE',onDelete:'CASCADE'}
+    )
+    materia:Materia[];
 }

@@ -1,19 +1,39 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException } from '@nestjs/common';
 import { CreatePlanDto } from './dto/create-plan.dto';
 import { UpdatePlanDto } from './dto/update-plan.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Plan } from './entities/plan.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class PlanService {
-  create(createPlanDto: CreatePlanDto) {
-    return 'This action adds a new plan';
+  constructor(
+    @InjectRepository(Plan)
+    private readonly planRepository:Repository<Plan>,
+  ){}
+
+  async create(createPlanDto: CreatePlanDto) {
+    try{
+      const plan = this.planRepository.create(createPlanDto);
+      await this.planRepository.save(plan);
+      return plan;
+    }
+    catch(error){
+      this.handleDBErrors(error);
+    }
   }
 
-  findAll() {
-    return `This action returns all plan`;
+  async findAll() {
+    
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} plan`;
+  async findOne(id: string) {
+    const plan = await this.planRepository.find({
+      where:{
+        id: id
+      }
+    })
+    return plan;
   }
 
   update(id: number, updatePlanDto: UpdatePlanDto) {
@@ -22,5 +42,13 @@ export class PlanService {
 
   remove(id: number) {
     return `This action removes a #${id} plan`;
+  }
+
+  private handleDBErrors(error:any){
+    if(error.code === '23505'){
+      throw new BadRequestException(error.detail);
+    }
+    console.log(error);
+    throw new InternalServerErrorException('Please check serverlogs');
   }
 }

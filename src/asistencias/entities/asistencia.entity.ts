@@ -12,19 +12,13 @@ export class Asistencia {
     @Column('date')
     fecha:Date;
 
-    @ManyToOne(
-        () => Alumno,
-        (alumno) => alumno.id,
-        {onDelete:'CASCADE',onUpdate:'CASCADE'}
-    )
-    id_Alumno:Alumno;
 
-    @ManyToOne(
+    /*@ManyToOne(
         () => Profesor,
         (profesor) => profesor.id,
         {onDelete:'CASCADE',onUpdate:'CASCADE'}
     )
-    id_Profesor:Profesor;
+    id_Profesor:Profesor;*/
 
     @ManyToOne(
         () => Materia,

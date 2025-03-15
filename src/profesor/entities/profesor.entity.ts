@@ -3,15 +3,8 @@ import { Column, Entity, ManyToOne, OneToOne, PrimaryColumn } from "typeorm";
 
 @Entity('profesores')
 export class Profesor {
-    @PrimaryColumn('text')
-    id:string
-
-    @OneToOne(
-        () => User,
-        (user) => user.id,
-        {onUpdate:'CASCADE',onDelete:'CASCADE'}
-    )
-    id_user:User;
+    @PrimaryColumn('integer')
+    noEmpleado:number
 
     @Column('text')
     nombre:string;
@@ -24,4 +17,11 @@ export class Profesor {
 
     @Column('text',{array:true})
     materias:string[];
+
+    @ManyToOne(
+        ()=> User,
+        (user) => user.id,
+        {onDelete:'CASCADE',onUpdate:'CASCADE'}
+    )
+    user:User;
 }
