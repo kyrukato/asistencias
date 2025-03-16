@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Grupo } from "src/grupo/entities/grupo.entity";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity('periodo')
 export class Periodo {
@@ -13,4 +14,11 @@ export class Periodo {
 
     @Column('integer')
     periodo:number;
+
+    @OneToMany(
+        () => Grupo,
+        (grupo) => grupo.periodo,
+        {onDelete:'CASCADE',onUpdate:'CASCADE'}
+    )
+    grupo:Grupo;
 }

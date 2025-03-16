@@ -1,34 +1,50 @@
+import { AlumnosXgrupo } from "src/alumnos-xgrupo/entities/alumnos-xgrupo.entity";
+import { AlumnosXmateria } from "src/alumnos-xmateria/entities/alumnos-xmateria.entity";
 import { Grupo } from "src/grupo/entities/grupo.entity";
 import { Materia } from "src/materia/entities/materia.entity";
 import { Profesor } from "src/profesor/entities/profesor.entity";
-import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity('materiaXgrupo')
 export class MateriaXgrupo {
     @PrimaryGeneratedColumn('uuid')
     id:string;
 
-    @OneToOne(
+    @ManyToOne(
         () => Materia,
         (materia) => materia.id,
         {onDelete:'CASCADE',onUpdate:'CASCADE'}
     )
-    id_Materia:Materia;
+    materia:Materia;
 
-    @OneToOne(
+    @ManyToOne(
         () => Grupo,
         (grupo) => grupo.id,
         {onUpdate:'CASCADE',onDelete:'CASCADE'}
     )
-    id_Grupo:Grupo;
+    grupo:Grupo;
 
     @Column('integer')
     semestre:number;
 
-    @OneToOne(
+    @ManyToOne(
         () => Profesor,
         (profesor) => profesor.noEmpleado,
         {onDelete:'CASCADE',onUpdate:'CASCADE'}
     )
-    id_Profesor:Profesor;
+    profesor:Profesor;
+
+    @OneToMany(
+        () => AlumnosXmateria,
+        (alumnosxmateria) => alumnosxmateria.materiaXGrupo,
+        {onUpdate:'CASCADE',onDelete:'CASCADE'}
+    )
+    alumnosxmateria:AlumnosXmateria[];
+
+    @OneToMany(
+        () => AlumnosXgrupo,
+        (alumnosxgrupo) => alumnosxgrupo.materiaXGrupo,
+        {onUpdate:'CASCADE',onDelete:'CASCADE'}
+    )
+    alumnosxgrupo:AlumnosXgrupo[];
 }

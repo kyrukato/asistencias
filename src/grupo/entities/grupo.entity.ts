@@ -1,6 +1,7 @@
 import { Carrera } from "src/carrera/entities/carrera.entity";
+import { MateriaXgrupo } from "src/materia-xgrupo/entities/materia-xgrupo.entity";
 import { Periodo } from "src/periodo/entities/periodo.entity";
-import { Column, Entity, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity('grupo')
 export class Grupo {
@@ -10,17 +11,24 @@ export class Grupo {
     @Column('integer')
     semestre:number;
 
-    @OneToOne(
+    @ManyToOne(
         () => Carrera,
         (carrera) => carrera.id,
         {onUpdate: 'CASCADE'}
     )
-    id_carrera:Carrera;
+    carrera:Carrera;
 
-    @OneToOne(
+    @ManyToOne(
         () => Periodo,
         (periodo) => periodo.id,
         {onUpdate:'CASCADE', onDelete:'CASCADE'}
     )
-    id_Periodo:Periodo;
+    periodo:Periodo;
+
+    @OneToMany(
+        () => MateriaXgrupo,
+        (materiaxgrupo) => materiaxgrupo.grupo,
+        {onUpdate:'CASCADE',onDelete:'CASCADE'},
+    )
+    materiaxgrupo:MateriaXgrupo[];
 }

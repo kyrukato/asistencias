@@ -1,6 +1,7 @@
+import { AlumnosXmateria } from "src/alumnos-xmateria/entities/alumnos-xmateria.entity";
 import { Carrera } from "src/carrera/entities/carrera.entity";
 import { User } from "src/users/entities/user.entity";
-import { Column, Entity, ManyToMany, ManyToOne, OneToOne, PrimaryColumn } from "typeorm";
+import { Column, Entity, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryColumn } from "typeorm";
 
 @Entity('Alumnos')
 export class Alumno {
@@ -29,4 +30,11 @@ export class Alumno {
         {onDelete: 'CASCADE'}
     )
     user:User;
+
+    @OneToMany(
+        () => AlumnosXmateria,
+        (alumnoXmateria) => alumnoXmateria.alumno,
+        {onDelete:'CASCADE',onUpdate:'CASCADE'}
+    )
+    alumnoXmateria:AlumnosXmateria
 }

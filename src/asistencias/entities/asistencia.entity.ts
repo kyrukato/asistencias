@@ -12,20 +12,12 @@ export class Asistencia {
     @Column('date')
     fecha:Date;
 
-
-    /*@ManyToOne(
-        () => Profesor,
-        (profesor) => profesor.id,
-        {onDelete:'CASCADE',onUpdate:'CASCADE'}
-    )
-    id_Profesor:Profesor;*/
-
     @ManyToOne(
         () => Materia,
         (materia) => materia.id,
         {onDelete:'CASCADE',onUpdate:'CASCADE'}
     )
-    id_Materia:Materia;
+    materia:Materia;
 
     @Column('text')
     dia:string;
@@ -41,7 +33,7 @@ export class Asistencia {
         (aula) => aula.id,
         {onDelete:'CASCADE',onUpdate:'CASCADE'}
     )
-    id_Aula:Aula;
+    aula:Aula;
 
     @Column('bool', {default:null})
     asistencia_Profesor:boolean;

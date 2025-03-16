@@ -7,7 +7,7 @@ import { UpdateProfesorDto } from './dto/update-profesor.dto';
 export class ProfesorController {
   constructor(private readonly profesorService: ProfesorService) {}
 
-  @Post()
+  @Post('create')
   create(@Body() createProfesorDto: CreateProfesorDto) {
     return this.profesorService.create(createProfesorDto);
   }

@@ -1,25 +1,25 @@
 import { Aula } from "src/aula/entities/aula.entity";
 import { MateriaXgrupo } from "src/materia-xgrupo/entities/materia-xgrupo.entity";
-import { Column, Entity, OneToMany, OneToOne, PrimaryGeneratedColumn, Timestamp } from "typeorm";
+import { Column, Entity, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn, Timestamp } from "typeorm";
 
 @Entity('alumnosXgrupo')
 export class AlumnosXgrupo {
     @PrimaryGeneratedColumn('increment')
     id:number;
 
-    @OneToOne(
+    @ManyToOne(
         () => MateriaXgrupo,
         (materiaGrupo) => materiaGrupo.id,
         {onUpdate:'CASCADE',onDelete:'CASCADE'}
     )
-    id_MateriaXGrupo:MateriaXgrupo;
+    materiaXGrupo:MateriaXgrupo;
 
-    @OneToOne(
+    @ManyToOne(
         () => Aula,
         (aula) => aula.id,
         {onUpdate:'CASCADE',onDelete:'CASCADE'}
     )
-    id_Aula:Aula;
+    aula:Aula;
 
     @Column('text')
     dia:string;

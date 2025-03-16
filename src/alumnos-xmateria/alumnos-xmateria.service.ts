@@ -1,11 +1,24 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException } from '@nestjs/common';
 import { CreateAlumnosXmateriaDto } from './dto/create-alumnos-xmateria.dto';
 import { UpdateAlumnosXmateriaDto } from './dto/update-alumnos-xmateria.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { AlumnosXmateria } from './entities/alumnos-xmateria.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class AlumnosXmateriaService {
-  create(createAlumnosXmateriaDto: CreateAlumnosXmateriaDto) {
-    return 'This action adds a new alumnosXmateria';
+  constructor(
+    @InjectRepository(AlumnosXmateria)
+    private readonly alumnosXmateriaRepository:Repository<AlumnosXmateria>,
+  ) {}
+  async create(createAlumnosXmateriaDto: CreateAlumnosXmateriaDto) {
+    try {
+      const alumnoxmateria = this.alumnosXmateriaRepository.create(createAlumnosXmateriaDto);
+      await this.alumnosXmateriaRepository.save(alumnoxmateria);
+      return alumnoxmateria;
+    } catch (error) {
+      this.handleDBErrors(error);
+    }
   }
 
   findAll() {
@@ -22,5 +35,13 @@ export class AlumnosXmateriaService {
 
   remove(id: number) {
     return `This action removes a #${id} alumnosXmateria`;
+  }
+
+  private handleDBErrors(error:any){
+    if(error.code === '23505'){
+      throw new BadRequestException(error.detail);
+    }
+    console.log(error);
+    throw new InternalServerErrorException('Please check serverlogs');
   }
 }

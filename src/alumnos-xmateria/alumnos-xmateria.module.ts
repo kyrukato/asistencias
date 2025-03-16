@@ -9,6 +9,7 @@ import { AlumnosXmateria } from './entities/alumnos-xmateria.entity';
   providers: [AlumnosXmateriaService],
   imports: [
     TypeOrmModule.forFeature([AlumnosXmateria])
-  ]
+  ],
+  exports:[AlumnosXmateriaService]
 })
 export class AlumnosXmateriaModule {}

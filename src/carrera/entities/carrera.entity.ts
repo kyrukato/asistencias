@@ -1,4 +1,5 @@
 import { Alumno } from "src/alumno/entities/alumno.entity";
+import { Grupo } from "src/grupo/entities/grupo.entity";
 import { Materia } from "src/materia/entities/materia.entity";
 import { Plan } from "src/plan/entities/plan.entity";
 import { Column, Entity, ManyToOne, OneToMany, OneToOne, PrimaryColumn } from "typeorm";
@@ -36,4 +37,11 @@ export class Carrera {
         {onUpdate:'CASCADE',onDelete:'CASCADE'}
     )
     materia:Materia[];
+
+    @OneToMany(
+        () => Grupo,
+        (grupo) => grupo.carrera,
+        {onDelete:'CASCADE', onUpdate:'CASCADE'}
+    )
+    grupo:Grupo[];
 }

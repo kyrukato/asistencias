@@ -9,6 +9,7 @@ import { MateriaXgrupo } from './entities/materia-xgrupo.entity';
   providers: [MateriaXgrupoService],
   imports: [
     TypeOrmModule.forFeature([MateriaXgrupo])
-  ]
+  ],
+  exports:[MateriaXgrupoService],
 })
 export class MateriaXgrupoModule {}

@@ -7,7 +7,7 @@ import { UpdateAulaDto } from './dto/update-aula.dto';
 export class AulaController {
   constructor(private readonly aulaService: AulaService) {}
 
-  @Post()
+  @Post('create')
   create(@Body() createAulaDto: CreateAulaDto) {
     return this.aulaService.create(createAulaDto);
   }

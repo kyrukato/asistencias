@@ -1,1 +1,5 @@
-export class CreateAulaDto {}
+export class CreateAulaDto {
+    nombre: string;
+
+    edificio:string;
+}

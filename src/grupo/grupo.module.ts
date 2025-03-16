@@ -9,6 +9,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
   providers: [GrupoService],
   imports: [
     TypeOrmModule.forFeature([Grupo])
-  ]
+  ],
+  exports:[GrupoService]
 })
 export class GrupoModule {}

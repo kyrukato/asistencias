@@ -1,11 +1,24 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException } from '@nestjs/common';
 import { CreateAsistenciaDto } from './dto/create-asistencia.dto';
 import { UpdateAsistenciaDto } from './dto/update-asistencia.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Asistencia } from './entities/asistencia.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class AsistenciasService {
-  create(createAsistenciaDto: CreateAsistenciaDto) {
-    return 'This action adds a new asistencia';
+  constructor(
+    @InjectRepository(Asistencia)
+    private readonly asistenciaRepository:Repository<Asistencia>,
+  ){}
+  async create(createAsistenciaDto: CreateAsistenciaDto) {
+    try {
+      const asistencia = this.asistenciaRepository.create(createAsistenciaDto);
+      await this.asistenciaRepository.save(asistencia);
+      return asistencia;
+    } catch (error) {
+      this.handleDBErrors(error);
+    }
   }
 
   findAll() {
@@ -22,5 +35,13 @@ export class AsistenciasService {
 
   remove(id: number) {
     return `This action removes a #${id} asistencia`;
+  }
+
+  private handleDBErrors(error:any){
+    if(error.code === '23505'){
+      throw new BadRequestException(error.detail);
+    }
+    console.log(error);
+    throw new InternalServerErrorException('Please check serverlogs');
   }
 }

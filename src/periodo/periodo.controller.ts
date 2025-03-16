@@ -7,7 +7,7 @@ import { UpdatePeriodoDto } from './dto/update-periodo.dto';
 export class PeriodoController {
   constructor(private readonly periodoService: PeriodoService) {}
 
-  @Post()
+  @Post('create')
   create(@Body() createPeriodoDto: CreatePeriodoDto) {
     return this.periodoService.create(createPeriodoDto);
   }

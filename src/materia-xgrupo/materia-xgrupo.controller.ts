@@ -3,11 +3,11 @@ import { MateriaXgrupoService } from './materia-xgrupo.service';
 import { CreateMateriaXgrupoDto } from './dto/create-materia-xgrupo.dto';
 import { UpdateMateriaXgrupoDto } from './dto/update-materia-xgrupo.dto';
 
-@Controller('materia-xgrupo')
+@Controller('materiaxgrupo')
 export class MateriaXgrupoController {
   constructor(private readonly materiaXgrupoService: MateriaXgrupoService) {}
 
-  @Post()
+  @Post('create')
   create(@Body() createMateriaXgrupoDto: CreateMateriaXgrupoDto) {
     return this.materiaXgrupoService.create(createMateriaXgrupoDto);
   }

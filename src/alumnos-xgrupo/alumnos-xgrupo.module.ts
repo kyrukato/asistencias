@@ -9,6 +9,7 @@ import { AlumnosXgrupo } from './entities/alumnos-xgrupo.entity';
   providers: [AlumnosXgrupoService],
   imports: [
     TypeOrmModule.forFeature([AlumnosXgrupo])
-  ]
+  ],
+  exports: [AlumnosXgrupoService],
 })
 export class AlumnosXgrupoModule {}

@@ -9,6 +9,7 @@ import { Periodo } from './entities/periodo.entity';
   providers: [PeriodoService],
   imports: [
     TypeOrmModule.forFeature([Periodo])
-  ]
+  ],
+  exports:[PeriodoService],
 })
 export class PeriodoModule {}
