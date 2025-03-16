@@ -9,8 +9,8 @@ export class Asistencia {
     @PrimaryGeneratedColumn('increment')
     id:number;
 
-    @Column('date')
-    fecha:Date;
+    @Column({type:'date'})
+    fecha:string;
 
     @ManyToOne(
         () => Materia,
@@ -22,11 +22,11 @@ export class Asistencia {
     @Column('text')
     dia:string;
 
-    @Column('timestamp')
-    hora_Inicio:Timestamp;
+    @Column({type:'time'})
+    hora_Inicio:string;
 
-    @Column('timestamp')
-    hora_Fin:Timestamp;
+    @Column({type:'time'})
+    hora_Fin:string;
 
     @ManyToOne(
         () => Aula,

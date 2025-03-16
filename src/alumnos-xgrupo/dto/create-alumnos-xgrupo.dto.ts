@@ -9,7 +9,7 @@ export class CreateAlumnosXgrupoDto {
 
     dia:string;
 
-    horaInicio:Timestamp;
+    horaInicio:string;
 
-    horaFin:Timestamp;
+    horaFin:string;
 }

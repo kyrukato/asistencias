@@ -24,9 +24,9 @@ export class AlumnosXgrupo {
     @Column('text')
     dia:string;
 
-    @Column('timestamp')
-    horaInicio:Timestamp;
+    @Column('time')
+    horaInicio:string;
 
-    @Column('timestamp')
-    horaFin:Timestamp;
+    @Column('time')
+    horaFin:string;
 }

@@ -1,5 +1,5 @@
 export class CreatePeriodoDto {
-    fecha_Inicio:Date;
+    fecha_Inicio:string;
 
     fecha_Fin: Date;
 

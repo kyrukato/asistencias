@@ -5,7 +5,7 @@ import { Profesor } from "src/profesor/entities/profesor.entity";
 import { Timestamp } from "typeorm";
 
 export class CreateAsistenciaDto {
-    fecha: Date;
+    fecha: string;
 
     alumno:Alumno;
 
@@ -15,9 +15,9 @@ export class CreateAsistenciaDto {
 
     dia: string;
 
-    hora_Inicio:Timestamp;
+    hora_Inicio:string;
 
-    hora_Fin:Timestamp;
+    hora_Fin:string;
 
     aula:Aula;
 }
