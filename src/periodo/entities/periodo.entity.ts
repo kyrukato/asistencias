@@ -1,9 +1,9 @@
 import { Grupo } from "src/grupo/entities/grupo.entity";
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, OneToMany, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity('periodo')
 export class Periodo {
-    @PrimaryGeneratedColumn('uuid')
+    @PrimaryColumn('text')
     id:string;
 
     @Column({type: 'date'})

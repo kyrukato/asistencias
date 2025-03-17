@@ -19,7 +19,7 @@ export class ProfesorController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.profesorService.findOne(+id);
+    return this.profesorService.findOne(id);
   }
 
   @Patch(':id')

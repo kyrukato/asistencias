@@ -17,18 +17,23 @@ export class PlanController {
     return this.planService.findAll();
   }
 
-  @Get(':id')
+  @Get(':status')
+  findStatus(@Param('status') status:boolean){
+    return this.planService.findByStatus(status);
+  }
+
+  @Get('id')
   findOne(@Param('id') id: string) {
     return this.planService.findOne(id);
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updatePlanDto: UpdatePlanDto) {
-    return this.planService.update(+id, updatePlanDto);
+    return this.planService.update(id, updatePlanDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.planService.remove(+id);
+    return this.planService.remove(id);
   }
 }

@@ -1,13 +1,15 @@
-import { BadRequestException, Injectable, InternalServerErrorException } from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { CreatePlanDto } from './dto/create-plan.dto';
 import { UpdatePlanDto } from './dto/update-plan.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Plan } from './entities/plan.entity';
-import { Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
+import { find } from 'rxjs';
 
 @Injectable()
 export class PlanService {
   constructor(
+    private readonly dataSource:DataSource,
     @InjectRepository(Plan)
     private readonly planRepository:Repository<Plan>,
   ){}
@@ -24,7 +26,25 @@ export class PlanService {
   }
 
   async findAll() {
-    
+    try {
+      const planes = await this.planRepository.find();
+      return planes;
+    } catch (error) {
+      this.handleDBErrors(error);
+    }
+  }
+
+  async findByStatus(status:boolean) {
+    try {
+      const planes = await this.planRepository.find({
+        where:{
+          active:status,
+        }
+      });
+      return planes;
+    } catch (error) {
+      this.handleDBErrors(error);
+    }
   }
 
   async findOne(id: string) {
@@ -36,12 +56,52 @@ export class PlanService {
     return plan;
   }
 
-  update(id: number, updatePlanDto: UpdatePlanDto) {
-    return `This action updates a #${id} plan`;
+  async update(id: string, updatePlanDto: UpdatePlanDto) {
+    const plan = this.findOne(id);
+    if(!plan){
+      throw new NotFoundException('El plan no fue encontrado');
+    }
+    const planupdate = await this.planRepository.preload({
+      id: id,
+      descripcion: updatePlanDto.descripcion
+    })
+    const queryRunner = this.dataSource.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+    try{
+      await queryRunner.manager.save(planupdate);
+      await queryRunner.commitTransaction();
+      await queryRunner.release();
+      return planupdate;
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+      await queryRunner.release();
+      this.handleDBErrors(error);
+    }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} plan`;
+  async remove(id: string) {
+    const plan = this.findOne(id);
+    if(!plan){
+      throw new NotFoundException('El plan no fue encontrado');
+    }
+    const planupdate = await this.planRepository.preload({
+      id: id,
+      active: false
+    })
+    const queryRunner = this.dataSource.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+    try{
+      await queryRunner.manager.save(planupdate);
+      await queryRunner.commitTransaction();
+      await queryRunner.release();
+      return planupdate;
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+      await queryRunner.release();
+      this.handleDBErrors(error);
+    }
   }
 
   private handleDBErrors(error:any){

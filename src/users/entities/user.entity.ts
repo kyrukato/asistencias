@@ -1,6 +1,7 @@
 import { Alumno } from "src/alumno/entities/alumno.entity";
+import { Carrera } from "src/carrera/entities/carrera.entity";
 import { Profesor } from "src/profesor/entities/profesor.entity";
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity('Users')
 export class User {
@@ -22,9 +23,6 @@ export class User {
 
     @Column('text')
     rol: string;
-
-    @Column('text')
-    id_Carrera:string;
 
     @OneToMany(
         () => Alumno,

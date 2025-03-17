@@ -9,12 +9,12 @@ import { Repository } from 'typeorm';
 export class AulaService {
   constructor(
     @InjectRepository(Aula)
-    private readonly aulaService:Repository<Aula>,
+    private readonly aulaRepository:Repository<Aula>,
   ){}
   async create(createAulaDto: CreateAulaDto) {
     try {
-      const aula = this.aulaService.create(createAulaDto);
-      await this.aulaService.save(aula);
+      const aula = this.aulaRepository.create(createAulaDto);
+      await this.aulaRepository.save(aula);
       return aula;
     } catch (error) {
       this.handleDBErrors(error);
@@ -22,11 +22,25 @@ export class AulaService {
   }
 
   findAll() {
-    return `This action returns all aula`;
+    try {
+      const aula= this.aulaRepository.find();
+      return aula;
+    } catch (error) {
+      this.handleDBErrors(error);
+    }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} aula`;
+  async findOne(id: number) {
+    try {
+      const aula = await this.aulaRepository.find({
+        where:{
+          id: id,
+        }
+      })
+      return aula;
+    } catch (error) {
+      this.handleDBErrors(error);
+    }
   }
 
   update(id: number, updateAulaDto: UpdateAulaDto) {

@@ -1,7 +1,9 @@
 export class CreatePeriodoDto {
+    id:string;
+
     fecha_Inicio:string;
 
-    fecha_Fin: Date;
+    fecha_Fin: string;
 
     periodo: number;
 }

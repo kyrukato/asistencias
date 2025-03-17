@@ -20,8 +20,13 @@ export class ProfesorService {
     return `This action returns all profesor`;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} profesor`;
+  async findOne(id: string) {
+    const profesor = await this.profesorReposiroty.find({
+      where:{
+        user: {id}
+      },
+      relations:['users','materia']
+    })
   }
 
   update(id: number, updateProfesorDto: UpdateProfesorDto) {

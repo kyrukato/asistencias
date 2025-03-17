@@ -8,6 +8,9 @@ export class Grupo {
     @PrimaryGeneratedColumn('uuid')
     id:string;
 
+    @Column('text')
+    nombre:string;
+
     @Column('integer')
     semestre:number;
 
