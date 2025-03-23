@@ -19,16 +19,37 @@ export class GrupoController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.grupoService.findOne(+id);
+    return this.grupoService.findOne(id);
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateGrupoDto: UpdateGrupoDto) {
-    return this.grupoService.update(+id, updateGrupoDto);
+    return this.grupoService.update(id, updateGrupoDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.grupoService.remove(+id);
+    return this.grupoService.remove(id);
   }
+
+  @Get('/carrera/:carreraId')
+  findByCarrera(@Param('carreraId') carreraId: string) {
+    return this.grupoService.findByCarrera(carreraId);
+  } 
+
+  @Get('/periodo/:periodoId')
+  findByPeriodo(@Param('periodoId') periodoId: string) {
+    return this.grupoService.findByPeriodo(periodoId);
+  }
+
+  @Get('/profesor/:profesorId')
+  findByProfesor(@Param('profesorId') profesorId: string) {
+    return this.grupoService.findByProfesor(profesorId);
+  }
+
+  @Get('/with-materia-count')
+  findAllWithMateriaCount() {
+    return this.grupoService.findAllWithMateriaCount();
+}
+
 }
