@@ -1,5 +1,5 @@
-import { AlumnosXmateria } from "src/alumnos-xmateria/entities/alumnos-xmateria.entity";
 import { Carrera } from "src/carrera/entities/carrera.entity";
+import { MateriaXgrupo } from "src/materia-xgrupo/entities/materia-xgrupo.entity";
 import { User } from "src/users/entities/user.entity";
 import { Column, Entity, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryColumn } from "typeorm";
 
@@ -32,9 +32,9 @@ export class Alumno {
     user:User;
 
     @OneToMany(
-        () => AlumnosXmateria,
-        (alumnoXmateria) => alumnoXmateria.alumno,
+        () => MateriaXgrupo,
+        (materiaXgrupo) => materiaXgrupo.alumno,
         {onDelete:'CASCADE',onUpdate:'CASCADE'}
     )
-    alumnoXmateria:AlumnosXmateria
+    materiaxGrupo:MateriaXgrupo[];
 }

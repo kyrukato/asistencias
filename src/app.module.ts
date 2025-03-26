@@ -11,8 +11,6 @@ import { PlanModule } from './plan/plan.module';
 import { AulaModule } from './aula/aula.module';
 import { PeriodoModule } from './periodo/periodo.module';
 import { MateriaXgrupoModule } from './materia-xgrupo/materia-xgrupo.module';
-import { AlumnosXmateriaModule } from './alumnos-xmateria/alumnos-xmateria.module';
-import { AlumnosXgrupoModule } from './alumnos-xgrupo/alumnos-xgrupo.module';
 import { AsistenciasModule } from './asistencias/asistencias.module';
 import { AuthModule } from './auth/auth.module';
 import { AppService } from './app.service';
@@ -36,8 +34,6 @@ import { AppService } from './app.service';
     AulaModule,
     PeriodoModule,
     MateriaXgrupoModule,
-    AlumnosXmateriaModule,
-    AlumnosXgrupoModule,
     AsistenciasModule,
     AuthModule,
   ],

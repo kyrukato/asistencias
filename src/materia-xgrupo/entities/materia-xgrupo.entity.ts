@@ -1,5 +1,5 @@
-import { AlumnosXgrupo } from "src/alumnos-xgrupo/entities/alumnos-xgrupo.entity";
-import { AlumnosXmateria } from "src/alumnos-xmateria/entities/alumnos-xmateria.entity";
+import { Alumno } from "src/alumno/entities/alumno.entity";
+import { Aula } from "src/aula/entities/aula.entity";
 import { Grupo } from "src/grupo/entities/grupo.entity";
 import { Materia } from "src/materia/entities/materia.entity";
 import { Profesor } from "src/profesor/entities/profesor.entity";
@@ -34,17 +34,26 @@ export class MateriaXgrupo {
     )
     profesor:Profesor;
 
-    @OneToMany(
-        () => AlumnosXmateria,
-        (alumnosxmateria) => alumnosxmateria.materiaXGrupo,
-        {onUpdate:'CASCADE',onDelete:'CASCADE'}
+    @ManyToOne(
+        () => Alumno,
+        (alumno) => alumno.NoControl,
+        {onDelete:'CASCADE',onUpdate:'CASCADE'}
     )
-    alumnosxmateria:AlumnosXmateria[];
+    alumno:Alumno;
 
-    @OneToMany(
-        () => AlumnosXgrupo,
-        (alumnosxgrupo) => alumnosxgrupo.materiaXGrupo,
+    @ManyToOne(
+        () => Aula,
+        (aula) => aula.id,
         {onUpdate:'CASCADE',onDelete:'CASCADE'}
     )
-    alumnosxgrupo:AlumnosXgrupo[];
+    aula:Aula;
+
+    @Column('text')
+    dia:string;
+
+    @Column('time')
+    horaInicio:string;
+
+    @Column('time')
+    horaFin:string;
 }
