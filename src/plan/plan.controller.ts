@@ -23,17 +23,17 @@ export class PlanController {
   }
 
   @Get('getOne/id')
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id') id: number) {
     return this.planService.findOne(id);
   }
 
   @Patch('update/:id')
-  update(@Param('id') id: string, @Body() updatePlanDto: UpdatePlanDto) {
+  update(@Param('id') id: number, @Body() updatePlanDto: UpdatePlanDto) {
     return this.planService.update(id, updatePlanDto);
   }
 
   @Delete('delete/:id')
-  remove(@Param('id') id: string) {
+  remove(@Param('id') id: number) {
     return this.planService.remove(id);
   }
 }

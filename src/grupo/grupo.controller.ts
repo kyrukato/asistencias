@@ -2,6 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { GrupoService } from './grupo.service';
 import { CreateGrupoDto } from './dto/create-grupo.dto';
 import { UpdateGrupoDto } from './dto/update-grupo.dto';
+import { Grupo } from './entities/grupo.entity';
 
 @Controller('grupo')
 export class GrupoController {
@@ -13,43 +14,29 @@ export class GrupoController {
   }
 
   @Get()
-  findAll() {
-    return this.grupoService.findAll();
+  findAll(): Promise<Grupo[]> {
+      return this.grupoService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.grupoService.findOne(id);
+  findOne(@Param('id') id: number): Promise<Grupo> {
+      return this.grupoService.findOne(id);
+  }
+
+  @Get('nombre/:nombre')
+  findOneByNombre(@Param('nombre') nombre: string): Promise<Grupo> {
+      return this.grupoService.findOneByNombre(nombre);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateGrupoDto: UpdateGrupoDto) {
-    return this.grupoService.update(id, updateGrupoDto);
+  update(@Param('id') id: number, @Body() updateGrupoDto: UpdateGrupoDto): Promise<Grupo> {
+      return this.grupoService.update(id, updateGrupoDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.grupoService.remove(id);
+  remove(@Param('id') id: number): Promise<void> {
+      return this.grupoService.remove(id);
   }
-
-  @Get('/carrera/:carreraId')
-  findByCarrera(@Param('carreraId') carreraId: string) {
-    return this.grupoService.findByCarrera(carreraId);
-  } 
-
-  @Get('/periodo/:periodoId')
-  findByPeriodo(@Param('periodoId') periodoId: string) {
-    return this.grupoService.findByPeriodo(periodoId);
-  }
-
-  @Get('/profesor/:profesorId')
-  findByProfesor(@Param('profesorId') profesorId: string) {
-    return this.grupoService.findByProfesor(profesorId);
-  }
-
-  @Get('/with-materia-count')
-  findAllWithMateriaCount() {
-    return this.grupoService.findAllWithMateriaCount();
 }
 
-}
+

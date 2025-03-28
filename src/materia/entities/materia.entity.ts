@@ -1,12 +1,15 @@
 import { Asistencia } from "src/asistencias/entities/asistencia.entity";
 import { Carrera } from "src/carrera/entities/carrera.entity";
 import { MateriaXgrupo } from "src/materia-xgrupo/entities/materia-xgrupo.entity";
-import { Column, Entity, ManyToOne, OneToMany, PrimaryColumn } from "typeorm";
+import { Column, Entity, ManyToOne, OneToMany, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity('materia')
 export class Materia {
-    @PrimaryColumn('text')
-    id:string;
+    @PrimaryGeneratedColumn('increment')
+    id:number;
+
+    @Column('text')
+    clave:string;
 
     @Column('text')
     nombre:string;

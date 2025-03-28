@@ -19,17 +19,17 @@ export class MateriaController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string): Promise<Materia> {
+  findOne(@Param('id') id: number): Promise<Materia> {
       return this.materiaService.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateMateriaDto: UpdateMateriaDto): Promise<Materia> {
+  update(@Param('id') id: number, @Body() updateMateriaDto: UpdateMateriaDto): Promise<Materia> {
       return this.materiaService.update(id, updateMateriaDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string): Promise<void> {
+  remove(@Param('id') id: number): Promise<void> {
       return this.materiaService.remove(id);
   }
 }

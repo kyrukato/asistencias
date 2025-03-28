@@ -27,7 +27,7 @@ export class CarreraService {
     return await this.carreraRepository.find();
 }
 
-async findOne(id: string): Promise<Carrera> {
+async findOne(id: number): Promise<Carrera> {
     const carrera = await this.carreraRepository.findOne({ where: { id } });
     if (!carrera) {
         throw new NotFoundException(`Carrera con ID ${id} no encontrada`);
@@ -35,7 +35,7 @@ async findOne(id: string): Promise<Carrera> {
     return carrera;
 }
 
-async update(id: string, updateCarreraDto: UpdateCarreraDto): Promise<Carrera> {
+async update(id: number, updateCarreraDto: UpdateCarreraDto): Promise<Carrera> {
     const carrera = await this.findOne(id);
     Object.assign(carrera, updateCarreraDto);
     try {
@@ -45,7 +45,7 @@ async update(id: string, updateCarreraDto: UpdateCarreraDto): Promise<Carrera> {
     }
 }
 
-async remove(id: string): Promise<void> {
+async remove(id: number): Promise<void> {
     const carrera = await this.findOne(id);
     await this.carreraRepository.remove(carrera);
 }

@@ -2,12 +2,15 @@ import { Alumno } from "src/alumno/entities/alumno.entity";
 import { Grupo } from "src/grupo/entities/grupo.entity";
 import { Materia } from "src/materia/entities/materia.entity";
 import { Plan } from "src/plan/entities/plan.entity";
-import { Column, Entity, ManyToOne, OneToMany, OneToOne, PrimaryColumn } from "typeorm";
+import { Column, Entity, ManyToOne, OneToMany, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity('Carreras')
 export class Carrera {
-    @PrimaryColumn('text')
-    id:string;
+    @PrimaryGeneratedColumn('increment')
+    id:number;
+
+    @Column('text')
+    clave:string;
 
     @Column('text')
     nombre:string;

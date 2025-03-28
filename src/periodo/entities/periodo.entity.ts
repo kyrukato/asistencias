@@ -3,8 +3,11 @@ import { Column, Entity, OneToMany, PrimaryColumn, PrimaryGeneratedColumn } from
 
 @Entity('periodo')
 export class Periodo {
-    @PrimaryColumn('text')
-    id:string;
+    @PrimaryGeneratedColumn('increment')
+    id:number;
+
+    @Column('text')
+    nombre:string;
 
     @Column({type: 'date'})
     fecha_Inicio:string;

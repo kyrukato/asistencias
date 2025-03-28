@@ -27,7 +27,7 @@ export class MateriaService {
     return await this.materiaRepository.find();
 }
 
-async findOne(id: string): Promise<Materia> {
+async findOne(id: number): Promise<Materia> {
     const materia = await this.materiaRepository.findOne({ where: { id } });
     if (!materia) {
         throw new NotFoundException(`Materia con ID ${id} no encontrada`);
@@ -35,7 +35,7 @@ async findOne(id: string): Promise<Materia> {
     return materia;
 }
 
-async update(id: string, updateMateriaDto: UpdateMateriaDto): Promise<Materia> {
+async update(id: number, updateMateriaDto: UpdateMateriaDto): Promise<Materia> {
     const materia = await this.findOne(id);
     Object.assign(materia, updateMateriaDto);
     try {
@@ -45,7 +45,7 @@ async update(id: string, updateMateriaDto: UpdateMateriaDto): Promise<Materia> {
     }
 }
 
-async remove(id: string): Promise<void> {
+async remove(id: number): Promise<void> {
     const materia = await this.findOne(id);
     await this.materiaRepository.remove(materia);
 }

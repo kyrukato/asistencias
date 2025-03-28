@@ -19,17 +19,17 @@ export class CarreraController {
   }
 
   @Get('getOne/:id')
-  findOne(@Param('id') id: string): Promise<Carrera> {
+  findOne(@Param('id') id: number): Promise<Carrera> {
       return this.carreraService.findOne(id);
   }
 
   @Patch('update/:id')
-  update(@Param('id') id: string, @Body() updateCarreraDto: UpdateCarreraDto): Promise<Carrera> {
+  update(@Param('id') id: number, @Body() updateCarreraDto: UpdateCarreraDto): Promise<Carrera> {
       return this.carreraService.update(id, updateCarreraDto);
   }
 
   @Delete('delete/:id')
-  remove(@Param('id') id: string): Promise<void> {
+  remove(@Param('id') id: number): Promise<void> {
       return this.carreraService.remove(id);
   }
 }

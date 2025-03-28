@@ -1,10 +1,13 @@
 import { Carrera } from "src/carrera/entities/carrera.entity";
-import { Column, Entity, OneToMany, PrimaryColumn } from "typeorm";
+import { Column, Entity, OneToMany, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity('plan')
 export class Plan {
-    @PrimaryColumn('text')
-    id:string;
+    @PrimaryGeneratedColumn('increment')
+    id:number;
+
+    @Column('text')
+    clave:string;
 
     @Column('text')
     descripcion:string;

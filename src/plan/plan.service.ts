@@ -47,7 +47,7 @@ export class PlanService {
     }
   }
 
-  async findOne(id: string) {
+  async findOne(id: number) {
     const plan = await this.planRepository.find({
       where:{
         id: id
@@ -56,7 +56,7 @@ export class PlanService {
     return plan;
   }
 
-  async update(id: string, updatePlanDto: UpdatePlanDto) {
+  async update(id: number, updatePlanDto: UpdatePlanDto) {
     const plan = this.findOne(id);
     if(!plan){
       throw new NotFoundException('El plan no fue encontrado');
@@ -80,7 +80,7 @@ export class PlanService {
     }
   }
 
-  async remove(id: string) {
+  async remove(id: number) {
     const plan = this.findOne(id);
     if(!plan){
       throw new NotFoundException('El plan no fue encontrado');

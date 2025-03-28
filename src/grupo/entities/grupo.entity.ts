@@ -1,12 +1,12 @@
 import { Carrera } from "src/carrera/entities/carrera.entity";
 import { MateriaXgrupo } from "src/materia-xgrupo/entities/materia-xgrupo.entity";
 import { Periodo } from "src/periodo/entities/periodo.entity";
-import { Column, Entity, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity('grupo')
 export class Grupo {
-    @PrimaryGeneratedColumn('uuid')
-    id:string;
+    @PrimaryGeneratedColumn('increment')
+    id:number;
 
     @Column('text')
     nombre:string;

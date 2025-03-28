@@ -2,8 +2,9 @@ import { IsNotEmpty, IsNumber, IsString, IsUUID, IsArray, ArrayNotEmpty } from '
 import { Carrera } from 'src/carrera/entities/carrera.entity';
 
 export class CreateMateriaDto {
-    @IsUUID('all', { message: 'El ID debe ser un UUID válido.' })
-    id: string;
+    @IsString()
+    @IsNotEmpty({ message: 'La clave es obligatoria.' })
+    clave: string;
 
     @IsNotEmpty({ message: 'El nombre de la materia es obligatorio.' })
     @IsString({ message: 'El nombre de la materia debe ser una cadena de texto.' })
@@ -18,5 +19,5 @@ export class CreateMateriaDto {
     temario: string[];
 
     @IsNotEmpty({ message: 'La carrera es obligatoria.' })
-    carrera: Carrera; // Aquí puedes agregar más validaciones si es necesario
+    carrera: Carrera; 
 }
