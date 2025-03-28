@@ -2,6 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { MateriaService } from './materia.service';
 import { CreateMateriaDto } from './dto/create-materia.dto';
 import { UpdateMateriaDto } from './dto/update-materia.dto';
+import { Materia } from './entities/materia.entity';
 
 @Controller('materia')
 export class MateriaController {
@@ -13,22 +14,22 @@ export class MateriaController {
   }
 
   @Get()
-  findAll() {
-    return this.materiaService.findAll();
+  findAll(): Promise<Materia[]> {
+      return this.materiaService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.materiaService.findOne(+id);
+  findOne(@Param('id') id: string): Promise<Materia> {
+      return this.materiaService.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateMateriaDto: UpdateMateriaDto) {
-    return this.materiaService.update(+id, updateMateriaDto);
+  update(@Param('id') id: string, @Body() updateMateriaDto: UpdateMateriaDto): Promise<Materia> {
+      return this.materiaService.update(id, updateMateriaDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.materiaService.remove(+id);
+  remove(@Param('id') id: string): Promise<void> {
+      return this.materiaService.remove(id);
   }
 }

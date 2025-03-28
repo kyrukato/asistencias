@@ -12,7 +12,7 @@ export class PlanController {
     return this.planService.create(createPlanDto);
   }
 
-  @Get()
+  @Get('getAll')
   findAll() {
     return this.planService.findAll();
   }
@@ -22,17 +22,17 @@ export class PlanController {
     return this.planService.findByStatus(status);
   }
 
-  @Get('id')
+  @Get('getOne/id')
   findOne(@Param('id') id: string) {
     return this.planService.findOne(id);
   }
 
-  @Patch(':id')
+  @Patch('update/:id')
   update(@Param('id') id: string, @Body() updatePlanDto: UpdatePlanDto) {
     return this.planService.update(id, updatePlanDto);
   }
 
-  @Delete(':id')
+  @Delete('delete/:id')
   remove(@Param('id') id: string) {
     return this.planService.remove(id);
   }

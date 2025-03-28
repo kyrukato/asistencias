@@ -2,6 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { CarreraService } from './carrera.service';
 import { CreateCarreraDto } from './dto/create-carrera.dto';
 import { UpdateCarreraDto } from './dto/update-carrera.dto';
+import { Carrera } from './entities/carrera.entity';
 
 @Controller('carrera')
 export class CarreraController {
@@ -12,23 +13,23 @@ export class CarreraController {
     return this.carreraService.create(createCarreraDto);
   }
 
-  @Get()
-  findAll() {
-    return this.carreraService.findAll();
+  @Get('getAll')
+  findAll(): Promise<Carrera[]> {
+      return this.carreraService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.carreraService.findOne(+id);
+  @Get('getOne/:id')
+  findOne(@Param('id') id: string): Promise<Carrera> {
+      return this.carreraService.findOne(id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCarreraDto: UpdateCarreraDto) {
-    return this.carreraService.update(+id, updateCarreraDto);
+  @Patch('update/:id')
+  update(@Param('id') id: string, @Body() updateCarreraDto: UpdateCarreraDto): Promise<Carrera> {
+      return this.carreraService.update(id, updateCarreraDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.carreraService.remove(+id);
+  @Delete('delete/:id')
+  remove(@Param('id') id: string): Promise<void> {
+      return this.carreraService.remove(id);
   }
 }

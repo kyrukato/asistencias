@@ -12,22 +12,22 @@ export class AulaController {
     return this.aulaService.create(createAulaDto);
   }
 
-  @Get()
+  @Get('getAll')
   findAll() {
     return this.aulaService.findAll();
   }
 
-  @Get(':id')
+  @Get('getOne/:id')
   findOne(@Param('id') id: string) {
     return this.aulaService.findOne(+id);
   }
 
-  @Patch(':id')
+  @Patch('update/:id')
   update(@Param('id') id: string, @Body() updateAulaDto: UpdateAulaDto) {
     return this.aulaService.update(+id, updateAulaDto);
   }
 
-  @Delete(':id')
+  @Delete('delete/:id')
   remove(@Param('id') id: string) {
     return this.aulaService.remove(+id);
   }

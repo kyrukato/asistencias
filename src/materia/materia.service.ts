@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, InternalServerErrorException } from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { CreateMateriaDto } from './dto/create-materia.dto';
 import { UpdateMateriaDto } from './dto/update-materia.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -22,22 +22,33 @@ export class MateriaService {
     }
   }
 
-  findAll() {
-    return `This action returns all materia`;
-  }
 
-  findOne(id: number) {
-    return `This action returns a #${id} materia`;
-  }
+  async findAll(): Promise<Materia[]> {
+    return await this.materiaRepository.find();
+}
 
-  update(id: number, updateMateriaDto: UpdateMateriaDto) {
-    return `This action updates a #${id} materia`;
-  }
+async findOne(id: string): Promise<Materia> {
+    const materia = await this.materiaRepository.findOne({ where: { id } });
+    if (!materia) {
+        throw new NotFoundException(`Materia con ID ${id} no encontrada`);
+    }
+    return materia;
+}
 
-  remove(id: number) {
-    return `This action removes a #${id} materia`;
-  }
+async update(id: string, updateMateriaDto: UpdateMateriaDto): Promise<Materia> {
+    const materia = await this.findOne(id);
+    Object.assign(materia, updateMateriaDto);
+    try {
+        return await this.materiaRepository.save(materia);
+    } catch (error) {
+        this.handleDBErrors(error);
+    }
+}
 
+async remove(id: string): Promise<void> {
+    const materia = await this.findOne(id);
+    await this.materiaRepository.remove(materia);
+}
   private handleDBErrors(error:any){
     if(error.code === '23505'){
       throw new BadRequestException(error.detail);

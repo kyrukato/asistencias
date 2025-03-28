@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, InternalServerErrorException } from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { CreateAulaDto } from './dto/create-aula.dto';
 import { UpdateAulaDto } from './dto/update-aula.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -43,9 +43,24 @@ export class AulaService {
     }
   }
 
-  update(id: number, updateAulaDto: UpdateAulaDto) {
-    return `This action updates a #${id} aula`;
-  }
+  async update(id: number, updateAulaDto: UpdateAulaDto): Promise<Aula> {
+    // Buscar el aula por ID
+    const aula = await this.aulaRepository.findOne({ where: { id } });
+    if (!aula) {
+        throw new NotFoundException(`Aula con ID ${id} no encontrada`);
+    }
+
+    // Actualizar las propiedades del aula
+    Object.assign(aula, updateAulaDto);
+
+    try {
+        // Guardar los cambios en la base de datos
+        return await this.aulaRepository.save(aula);
+    } catch (error) {
+        this.handleDBErrors(error);
+    }
+}
+
 
   remove(id: number) {
     return `This action removes a #${id} aula`;

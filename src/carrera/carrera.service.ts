@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, InternalServerErrorException } from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { CreateCarreraDto } from './dto/create-carrera.dto';
 import { UpdateCarreraDto } from './dto/update-carrera.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -23,21 +23,32 @@ export class CarreraService {
     }
   }
 
-  findAll() {
-    return `This action returns all carrera`;
-  }
+  async findAll(): Promise<Carrera[]> {
+    return await this.carreraRepository.find();
+}
 
-  findOne(id: number) {
-    return `This action returns a #${id} carrera`;
-  }
+async findOne(id: string): Promise<Carrera> {
+    const carrera = await this.carreraRepository.findOne({ where: { id } });
+    if (!carrera) {
+        throw new NotFoundException(`Carrera con ID ${id} no encontrada`);
+    }
+    return carrera;
+}
 
-  update(id: number, updateCarreraDto: UpdateCarreraDto) {
-    return `This action updates a #${id} carrera`;
-  }
+async update(id: string, updateCarreraDto: UpdateCarreraDto): Promise<Carrera> {
+    const carrera = await this.findOne(id);
+    Object.assign(carrera, updateCarreraDto);
+    try {
+        return await this.carreraRepository.save(carrera);
+    } catch (error) {
+        this.handleDBErrors(error);
+    }
+}
 
-  remove(id: number) {
-    return `This action removes a #${id} carrera`;
-  }
+async remove(id: string): Promise<void> {
+    const carrera = await this.findOne(id);
+    await this.carreraRepository.remove(carrera);
+}
   
   private handleDBErrors(error:any){
     if(error.code === '23505'){
