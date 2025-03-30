@@ -1,3 +1,4 @@
+import { Asistencia } from "src/asistencias/entities/asistencia.entity";
 import { MateriaXgrupo } from "src/materia-xgrupo/entities/materia-xgrupo.entity";
 import { User } from "src/users/entities/user.entity";
 import { Column, Entity, ManyToOne, OneToMany, OneToOne, PrimaryColumn } from "typeorm";
@@ -32,4 +33,11 @@ export class Profesor {
         {onDelete:'CASCADE',onUpdate:'CASCADE'}
     )
     materiaxgrupo:MateriaXgrupo[];
+
+    @OneToMany(
+        () => Asistencia,
+        (asistencia) => asistencia.profesor,
+        {onDelete:'CASCADE',onUpdate:'CASCADE'}
+    )
+    asistencia:Asistencia[];
 }

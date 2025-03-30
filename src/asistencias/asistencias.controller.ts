@@ -2,6 +2,10 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestj
 import { AsistenciasService } from './asistencias.service';
 import { CreateAsistenciaDto } from './dto/create-asistencia.dto';
 import { UpdateAsistenciaDto } from './dto/update-asistencia.dto';
+import { buscarAsistenciasAlumnoDto } from './dto/buscarAsistenciasAlumno.dto';
+import { bucarAsistenciasProfesorDto } from './dto/buscarAsistenciasProfesor.dto';
+import { Aula } from 'src/aula/entities/aula.entity';
+import { Profesor } from 'src/profesor/entities/profesor.entity';
 
 @Controller('asistencias')
 export class AsistenciasController {
@@ -17,48 +21,53 @@ export class AsistenciasController {
     return this.asistenciasService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: number) {
-    return this.asistenciasService.findOne(id);
+  @Get('alumno')
+  findAlumno(@Body() asistenciaAlumnoDto:buscarAsistenciasAlumnoDto) {
+    return this.asistenciasService.findAsistenciasAlumno(asistenciaAlumnoDto);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: number, @Body() updateAsistenciaDto: UpdateAsistenciaDto) {
-    return this.asistenciasService.update(id, updateAsistenciaDto);
+  @Get('profesor')
+  findProfesor(@Body() asistenciaProferorDto:bucarAsistenciasProfesorDto) {
+    return this.asistenciasService.findAsistenciasProfesor(asistenciaProferorDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: number) {
-    return this.asistenciasService.remove(id);
+  @Get('byaula')
+  findbyAula(@Body() fecha:string, aula:Aula) {
+    return this.asistenciasService.findByAula(fecha,aula);
   }
 
-  @Patch(':id/profesor')
-  registrarAsistenciaProfesor(@Param('id') id: number, @Body('asistio') asistio: boolean) {
-    return this.asistenciasService.registrarAsistenciaProfesor(id, asistio);
+  @Get('byprofesor')
+  findbyProfesor(@Body() fecha:string, profesor:Profesor) {
+    return this.asistenciasService.findByProfesor(fecha,profesor);
   }
 
-  @Patch(':id/alumno')
-  registrarAsistenciaAlumno(@Param('id') id: number, @Body('asistio') asistio: boolean) {
-    return this.asistenciasService.registrarAsistenciaAlumno(id, asistio);
+  @Get('byhora')
+  findbyHora(@Body() fecha:string, hora:string) {
+    return this.asistenciasService.findByHora(fecha,hora);
   }
 
-  @Patch(':id/checador')
-  registrarAsistenciaChecador(@Param('id') id: number, @Body('asistio') asistio: boolean) {
-    return this.asistenciasService.registrarAsistenciaChecador(id, asistio);
+  @Get('bydia')
+  findbyDia(@Body() fecha:string) {
+    return this.asistenciasService.findByDia(fecha);
   }
 
-  @Get('/fecha')
-  buscarPorFecha(@Query('fecha') fecha: string) {
-    return this.asistenciasService.buscarPorFecha(fecha);
+  @Get('reporte')
+  reporteAsistencia(@Body() fecha_Inicio:string, fecha_Fin:string, profesor:Profesor){
+    return this.asistenciasService.obtenerTodasAsistencias(fecha_Inicio,fecha_Fin,profesor)
   }
 
-  @Get('/aula/:aulaId')
-  buscarPorAula(@Param('aulaId') aulaId: number) {
-    return this.asistenciasService.buscarPorAula(aulaId);
+  @Patch('alumno')
+  updateAlumno(@Body() updateAsistenciaDto: UpdateAsistenciaDto) {
+    return this.asistenciasService.updateAsistenciaAlumno(updateAsistenciaDto);
   }
 
-  @Get('/discrepancias')
-  obtenerAsistenciasConDiscrepancias() {
-    return this.asistenciasService.obtenerAsistenciasConDiscrepancias();
+  @Patch('profesor')
+  updateProfesor(@Body() updateAsistenciaDto: UpdateAsistenciaDto) {
+    return this.asistenciasService.updateAsistenciaProfesor(updateAsistenciaDto);
+  }
+
+  @Patch('checador')
+  updateChecador(@Body() updateAsistenciaDto: UpdateAsistenciaDto) {
+    return this.asistenciasService.updateAsistenciaChecador(updateAsistenciaDto);
   }
 }

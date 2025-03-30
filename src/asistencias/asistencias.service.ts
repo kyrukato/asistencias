@@ -3,19 +3,37 @@ import { CreateAsistenciaDto } from './dto/create-asistencia.dto';
 import { UpdateAsistenciaDto } from './dto/update-asistencia.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Asistencia } from './entities/asistencia.entity';
-import { Repository } from 'typeorm';
+import { Between, DataSource, LessThanOrEqual, MoreThanOrEqual, Repository } from 'typeorm';
+import { buscarAsistenciasAlumnoDto } from './dto/buscarAsistenciasAlumno.dto';
+import { bucarAsistenciasProfesorDto } from './dto/buscarAsistenciasProfesor.dto';
+import { Aula } from 'src/aula/entities/aula.entity';
+import { Profesor } from 'src/profesor/entities/profesor.entity';
 
 @Injectable()
 export class AsistenciasService {
   constructor(
+    private readonly dataSource:DataSource,
     @InjectRepository(Asistencia)
     private readonly asistenciaRepository:Repository<Asistencia>,
   ){}
   async create(createAsistenciaDto: CreateAsistenciaDto) {
     try {
-      const asistencia = this.asistenciaRepository.create(createAsistenciaDto);
-      await this.asistenciaRepository.save(asistencia);
-      return asistencia;
+      const {fecha_Fin, fecha_Inicio, ...data } = createAsistenciaDto;
+      const diasSemana = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+      let fecha = new Date(fecha_Inicio);
+      const fechaFinal = new Date(fecha_Fin);
+      while(fecha <= fechaFinal){
+        if((fecha.getDay() !== 0) || (fecha.getDay() !== 6)){
+          const asistencia = this.asistenciaRepository.create({
+            fecha: fecha.toString().split('T')[0],
+            dia: diasSemana[fecha.getDay()],
+            ...data
+          });
+          await this.asistenciaRepository.save(asistencia);
+          fecha.setDate(fecha.getDate() +1);
+        }
+      }
+      return "Registro exitoso";
     } catch (error) {
       this.handleDBErrors(error);
     }
@@ -30,7 +48,7 @@ export class AsistenciasService {
   async findOne(id: number) {
     const asistencia = await this.asistenciaRepository.findOne({ 
       where: { id },
-      relations: ['materia', 'aula']
+      relations: ['materia', 'aula', 'alumno', 'profesor']
     });
     
     if (!asistencia)
@@ -39,82 +57,254 @@ export class AsistenciasService {
     return asistencia;
   }
 
-  async update(id: number, updateAsistenciaDto: UpdateAsistenciaDto) {
+  async findAsistenciasAlumno(asistenciaAlumno:buscarAsistenciasAlumnoDto){
+    const {fecha_Inicio, fecha_Fin, alumno} = asistenciaAlumno;
+    if(fecha_Fin){
+      return await this.asistenciaRepository.find({
+        where: {
+          fecha: Between(fecha_Inicio,fecha_Fin),
+          alumno: alumno
+        },
+        relations:['alumno', 'profesor', 'aula', 'materia'],
+      })
+    }
+    else{
+      return await this.asistenciaRepository.find({
+        where: {
+          fecha: fecha_Inicio,
+          alumno: alumno
+        },
+        relations:['alumno', 'profesor', 'aula', 'materia'],
+      })
+    }
+  }
+
+  async findAsistenciasProfesor(asistenciaProfesor:bucarAsistenciasProfesorDto){
+    const {fecha_Inicio, fecha_Fin, profesor} = asistenciaProfesor;
+    if(fecha_Fin){
+      return await this.asistenciaRepository.find({
+        where: {
+          fecha: Between(fecha_Inicio,fecha_Fin),
+          profesor: profesor
+        },
+        relations:['alumno', 'profesor', 'aula', 'materia'],
+      })
+    }
+    else{
+      return await this.asistenciaRepository.find({
+        where: {
+          fecha: fecha_Inicio,
+          profesor: profesor
+        },
+        relations:['alumno', 'profesor', 'aula', 'materia'],
+      })
+    }
+  }
+
+  async findByAula(fecha:string,aula:Aula){
+    try{
+      return await this.asistenciaRepository.find({
+        where:{
+          fecha,
+          aula
+        },
+        relations:['alumno', 'profesor', 'aula', 'materia'],
+      })
+    }catch(error){
+      this.handleDBErrors(error)
+    }
+  }
+
+  async findByProfesor(fecha:string,profesor:Profesor){
+    try{
+      return await this.asistenciaRepository.find({
+        where:{
+          fecha,
+          profesor
+        },
+        relations:['alumno', 'profesor', 'aula', 'materia'],
+      })
+    }catch(error){
+      this.handleDBErrors(error)
+    }
+  }
+
+  async findByHora(fecha:string,hora:string){
+    try{
+      return await this.asistenciaRepository.find({
+        where:{
+          fecha,
+          hora_Inicio:LessThanOrEqual(hora),
+          hora_Fin: MoreThanOrEqual(hora)
+        },
+        relations:['alumno', 'profesor', 'aula', 'materia'],
+      })
+    }catch(error){
+      this.handleDBErrors(error)
+    }
+  }
+
+  async findByDia(fecha:string){
+    try{
+      return await this.asistenciaRepository.find({
+        where:{
+          fecha,
+        },
+        relations:['alumno', 'profesor', 'aula', 'materia'],
+      })
+    }catch(error){
+      this.handleDBErrors(error)
+    }
+  }
+
+  async updateAsistenciaAlumno(updateAsistenciaDto: UpdateAsistenciaDto) {
     try {
-      const asistencia = await this.findOne(id);
-      
-      const updatedAsistencia = this.asistenciaRepository.merge(
-        asistencia,
-        updateAsistenciaDto
-      );
-      
-      return await this.asistenciaRepository.save(updatedAsistencia);
+      const {id, asistencia_Alumno, asistencia_Checador, asistencia_Profesor} = updateAsistenciaDto;
+      if((asistencia_Alumno && (asistencia_Profesor || asistencia_Checador))){
+        throw new NotFoundException('Error al registrar actualización');
+      }
+      const asistencia = this.findOne(id);
+      if(!asistencia){
+        throw new NotFoundException('Registro no encontrado');
+      }
+      const updateAsistencia = await this.asistenciaRepository.preload({
+        id: id,
+        asistencia_Alumno:asistencia_Alumno
+      })
+      const queryRunner = this.dataSource.createQueryRunner();
+      await queryRunner.connect();
+      await queryRunner.startTransaction();
+      try{
+        await queryRunner.manager.save(updateAsistencia);
+        await queryRunner.commitTransaction();
+        await queryRunner.release();
+        return 'Asistencia registrada exitosamente'
+      } catch (error){
+        await queryRunner.rollbackTransaction();
+        await queryRunner.release();
+      }
     } catch (error) {
       this.handleDBErrors(error);
     }
   }
 
-  async remove(id: number) {
-    const asistencia = await this.findOne(id);
-    await this.asistenciaRepository.remove(asistencia);
-    return {
-      message: `Asistencia con ID ${id} eliminada correctamente`
-    };
-  }
-
-  async registrarAsistenciaProfesor(id: number, asistio: boolean) {
-    const asistencia = await this.findOne(id);
-    asistencia.asistencia_Profesor = asistio;
-    return await this.asistenciaRepository.save(asistencia);
-  }
-
-  async registrarAsistenciaAlumno(id: number, asistio: boolean) {
-    const asistencia = await this.findOne(id);
-    asistencia.asistencia_Alumno = asistio;
-    return await this.asistenciaRepository.save(asistencia);
-  }
-  
-  async registrarAsistenciaChecador(id: number, asistio: boolean) {
-    const asistencia = await this.findOne(id);
-    asistencia.asistencia_Checador = asistio;
-    return await this.asistenciaRepository.save(asistencia);
-  }
-
-  async buscarPorFecha(fecha: string) {
-    return await this.asistenciaRepository.find({
-      where: { fecha },
-      relations: ['materia', 'aula']
-    });
-  }
-
-  
-  
-  async buscarPorAula(aulaId: number) {
-    return await this.asistenciaRepository.find({
-      where: { aula: { id: aulaId } },
-      relations: ['materia', 'aula']
-    });
-  }
-
-  async obtenerAsistenciasConDiscrepancias() {
-    const asistencias = await this.asistenciaRepository.find({
-      relations: ['materia', 'aula']
-    });
-    
-    return asistencias.filter(asistencia => {
-      // Verificar si hay al menos dos registros diferentes y no nulos
-      const registros = [
-        asistencia.asistencia_Profesor,
-        asistencia.asistencia_Alumno,
-        asistencia.asistencia_Checador
-      ].filter(reg => reg !== null);
-      
-      // Si hay al menos 2 registros y no son todos iguales
-      if (registros.length >= 2) {
-        return !registros.every(reg => reg === registros[0]);
+  async updateAsistenciaProfesor(updateAsistenciaDto: UpdateAsistenciaDto) {
+    try {
+      const {id, asistencia_Alumno, asistencia_Checador, asistencia_Profesor} = updateAsistenciaDto;
+      if((asistencia_Profesor && (asistencia_Alumno || asistencia_Checador))){
+        throw new NotFoundException('Error al registrar actualización');
       }
-      return false;
-    });
+      const asistencia = this.findOne(id);
+      if(!asistencia){
+        throw new NotFoundException('Registro no encontrado');
+      }
+      const updateAsistencia = await this.asistenciaRepository.preload({
+        id: id,
+        asistencia_Profesor:asistencia_Profesor
+      })
+      const queryRunner = this.dataSource.createQueryRunner();
+      await queryRunner.connect();
+      await queryRunner.startTransaction();
+      try{
+        await queryRunner.manager.save(updateAsistencia);
+        await queryRunner.commitTransaction();
+        await queryRunner.release();
+        return 'Asistencia registrada exitosamente'
+      } catch (error){
+        await queryRunner.rollbackTransaction();
+        await queryRunner.release();
+      }
+    } catch (error) {
+      this.handleDBErrors(error);
+    }
+  }
+
+  async updateAsistenciaChecador(updateAsistenciaDto: UpdateAsistenciaDto) {
+    try {
+      const {id, asistencia_Alumno, asistencia_Checador, asistencia_Profesor} = updateAsistenciaDto;
+      if((asistencia_Checador && (asistencia_Profesor || asistencia_Alumno))){
+        throw new NotFoundException('Error al registrar actualización');
+      }
+      const asistencia = this.findOne(id);
+      if(!asistencia){
+        throw new NotFoundException('Registro no encontrado');
+      }
+      const updateAsistencia = await this.asistenciaRepository.preload({
+        id: id,
+        asistencia_Checador:asistencia_Checador
+      })
+      const queryRunner = this.dataSource.createQueryRunner();
+      await queryRunner.connect();
+      await queryRunner.startTransaction();
+      try{
+        await queryRunner.manager.save(updateAsistencia);
+        await queryRunner.commitTransaction();
+        await queryRunner.release();
+        return 'Asistencia registrada exitosamente'
+      } catch (error){
+        await queryRunner.rollbackTransaction();
+        await queryRunner.release();
+      }
+    } catch (error) {
+      this.handleDBErrors(error);
+    }
+  }
+
+  async obtenerTodasAsistencias(fecha_Inicio:string,fecha_Fin:string,profesor:Profesor){
+    try {
+      const asistencia = await this.asistenciaRepository.find({
+        where: {
+          fecha: Between(fecha_Inicio,fecha_Fin),
+          profesor
+        },
+        relations:['alumno', 'profesor', 'aula', 'materia'],
+      })
+      let asistenciaAlumno = 0;
+      let faltaAlumno = 0;
+      let AlumnoNull = 0;
+      let asistenciaProfesor = 0;
+      let faltaProfesor = 0;
+      let ProfesorNull = 0;
+      let asistenciaChecador = 0;
+      let faltaChecador = 0;
+      let ChecadorNull = 0;
+      asistencia.forEach(element => {
+        if(element.asistencia_Alumno === true){
+          asistenciaAlumno ++;
+        }
+        else if(element.asistencia_Alumno === false){
+          faltaAlumno ++;
+        }
+        else if(element.asistencia_Alumno === null){
+          AlumnoNull ++;
+        }
+        if(element.asistencia_Profesor === true){
+          asistenciaProfesor ++;
+        }
+        else if(element.asistencia_Profesor === false){
+          faltaProfesor ++;
+        }
+        else if(element.asistencia_Profesor === null){
+          ProfesorNull ++;
+        }
+        if(element.asistencia_Checador === true){
+          asistenciaChecador ++;
+        }
+        else if(element.asistencia_Checador === false){
+          faltaChecador ++;
+        }
+        else if(element.asistencia_Checador === null){
+          ChecadorNull ++;
+        }
+      });
+      return{
+        alumno: {registradas:asistenciaAlumno,faltas:faltaAlumno,sinRegistro:AlumnoNull},
+        profesor: {registradas:asistenciaProfesor,faltas:faltaProfesor,sinRegistro:ProfesorNull},
+        checador: {registradas:asistenciaChecador,faltas:faltaChecador,sinRegistro:ChecadorNull}
+      }
+    } catch (error) {
+      this.handleDBErrors(error);
+    }
   }
 
   private handleDBErrors(error:any){

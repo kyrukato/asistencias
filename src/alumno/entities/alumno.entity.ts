@@ -1,3 +1,4 @@
+import { Asistencia } from "src/asistencias/entities/asistencia.entity";
 import { Carrera } from "src/carrera/entities/carrera.entity";
 import { MateriaXgrupo } from "src/materia-xgrupo/entities/materia-xgrupo.entity";
 import { User } from "src/users/entities/user.entity";
@@ -37,4 +38,11 @@ export class Alumno {
         {onDelete:'CASCADE',onUpdate:'CASCADE'}
     )
     materiaxGrupo:MateriaXgrupo[];
+
+    @OneToMany(
+        () => Asistencia,
+        (asistencia) => asistencia.alumno,
+        {onDelete:'CASCADE',onUpdate:'CASCADE'}
+    )
+    asistencia:Asistencia[];
 }

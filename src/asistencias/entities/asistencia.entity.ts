@@ -13,6 +13,20 @@ export class Asistencia {
     fecha:string;
 
     @ManyToOne(
+        () => Alumno,
+        (alumno) => alumno.NoControl,
+        {onDelete:'CASCADE',onUpdate:'CASCADE'}
+    )
+    alumno:Alumno;
+
+    @ManyToOne(
+        () => Profesor,
+        (profesor) => profesor.noEmpleado,
+        {onDelete:'CASCADE',onUpdate:'CASCADE'}
+    )
+    profesor:Profesor;
+
+    @ManyToOne(
         () => Materia,
         (materia) => materia.id,
         {onDelete:'CASCADE',onUpdate:'CASCADE'}
