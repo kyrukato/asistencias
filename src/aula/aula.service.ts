@@ -62,9 +62,14 @@ export class AulaService {
 }
 
 
-  remove(id: number) {
-    return `This action removes a #${id} aula`;
+async remove(id: number): Promise<void> {
+  const aula = await this.findOne(id); 
+  try {
+      await this.aulaRepository.remove(aula); 
+  } catch (error) {
+      this.handleDBErrors(error);
   }
+}
 
   private handleDBErrors(error:any){
     if(error.code === '23505'){

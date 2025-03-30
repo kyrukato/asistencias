@@ -57,7 +57,7 @@ export class PlanService {
   }
 
   async update(id: number, updatePlanDto: UpdatePlanDto) {
-    const plan = this.findOne(id);
+    const plan =  await this.findOne(id);
     if(!plan){
       throw new NotFoundException('El plan no fue encontrado');
     }

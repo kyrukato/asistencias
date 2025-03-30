@@ -2,33 +2,34 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { PeriodoService } from './periodo.service';
 import { CreatePeriodoDto } from './dto/create-periodo.dto';
 import { UpdatePeriodoDto } from './dto/update-periodo.dto';
+import { Periodo } from './entities/periodo.entity';
 
 @Controller('periodo')
 export class PeriodoController {
   constructor(private readonly periodoService: PeriodoService) {}
 
-  @Post('create')
-  create(@Body() createPeriodoDto: CreatePeriodoDto) {
-    return this.periodoService.create(createPeriodoDto);
-  }
+    @Post('create')
+    create(@Body() createPeriodoDto: CreatePeriodoDto): Promise<Periodo> {
+        return this.periodoService.create(createPeriodoDto);
+    }
 
-  @Get()
-  findAll() {
-    return this.periodoService.findAll();
-  }
+    @Get()
+    findAll(): Promise<Periodo[]> {
+        return this.periodoService.findAll();
+    }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.periodoService.findOne(id);
-  }
+    @Get(':id')
+    findOne(@Param('id') id: number): Promise<Periodo> {
+        return this.periodoService.findOne(+id);
+    }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updatePeriodoDto: UpdatePeriodoDto) {
-    return this.periodoService.update(id, updatePeriodoDto);
-  }
+    @Patch(':id')
+    update(@Param('id') id: number, @Body() updatePeriodoDto: UpdatePeriodoDto): Promise<Periodo> {
+        return this.periodoService.update(+id, updatePeriodoDto);
+    }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.periodoService.remove(id);
-  }
+    @Delete(':id')
+    remove(@Param('id') id: number): Promise<void> {
+        return this.periodoService.remove(+id);
+    }
 }

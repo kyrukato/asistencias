@@ -25,11 +25,11 @@ export class CarreraController {
 
   @Patch('update/:id')
   update(@Param('id') id: number, @Body() updateCarreraDto: UpdateCarreraDto): Promise<Carrera> {
-      return this.carreraService.update(id, updateCarreraDto);
+      return this.carreraService.update(+id, updateCarreraDto);
   }
 
   @Delete('delete/:id')
   remove(@Param('id') id: number): Promise<void> {
-      return this.carreraService.remove(id);
+      return this.carreraService.remove(+id);
   }
 }
