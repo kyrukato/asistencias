@@ -9,6 +9,7 @@ import { buscarAsistenciasAlumnoDto } from './dto/buscarAsistenciasAlumno.dto';
 import { bucarAsistenciasProfesorDto } from './dto/buscarAsistenciasProfesor.dto';
 import { Aula } from 'src/aula/entities/aula.entity';
 import { Profesor } from 'src/profesor/entities/profesor.entity';
+import { reporteAsistenciasDto } from './dto/reporteAsistencias.dto';
 
 @Injectable()
 export class AsistenciasService {
@@ -59,13 +60,14 @@ export class AsistenciasService {
     return asistencia;
   }
 
+  /**Encuentra todos los registros de las asistencias del alumno por periodo o por fecha */
   async findAsistenciasAlumno(asistenciaAlumno:buscarAsistenciasAlumnoDto){
     const {fecha_Inicio, fecha_Fin, alumno} = asistenciaAlumno;
     if(fecha_Fin){
       return await this.asistenciaRepository.find({
         where: {
           fecha: Between(fecha_Inicio,fecha_Fin),
-          alumno: alumno
+          alumno: {NoControl:Number(alumno)}
         },
         relations:['alumno', 'profesor', 'aula', 'materia'],
       })
@@ -74,20 +76,21 @@ export class AsistenciasService {
       return await this.asistenciaRepository.find({
         where: {
           fecha: fecha_Inicio,
-          alumno: alumno
+          alumno: {NoControl:Number(alumno)}
         },
         relations:['alumno', 'profesor', 'aula', 'materia'],
       })
     }
   }
 
+  /**Encuentra todos los registros de las asistencias del profesor por periodo o por fecha */
   async findAsistenciasProfesor(asistenciaProfesor:bucarAsistenciasProfesorDto){
     const {fecha_Inicio, fecha_Fin, profesor} = asistenciaProfesor;
     if(fecha_Fin){
       return await this.asistenciaRepository.find({
         where: {
           fecha: Between(fecha_Inicio,fecha_Fin),
-          profesor: profesor
+          profesor: {noEmpleado:Number(profesor)}
         },
         relations:['alumno', 'profesor', 'aula', 'materia'],
       })
@@ -117,7 +120,7 @@ export class AsistenciasService {
     }
   }
 
-  async findByProfesor(fecha:string,profesor:Profesor){
+  /*async findByProfesor(fecha:string,profesor:Profesor){
     try{
       return await this.asistenciaRepository.find({
         where:{
@@ -129,9 +132,9 @@ export class AsistenciasService {
     }catch(error){
       this.handleDBErrors(error)
     }
-  }
+  }*/
 
-  async findByHora(fecha:string,hora:string){
+  /*async findByHora(fecha:string,hora:string){
     try{
       return await this.asistenciaRepository.find({
         where:{
@@ -144,9 +147,9 @@ export class AsistenciasService {
     }catch(error){
       this.handleDBErrors(error)
     }
-  }
+  }*/
 
-  async findByDia(fecha:string){
+  /*async findByDia(fecha:string){
     try{
       return await this.asistenciaRepository.find({
         where:{
@@ -157,7 +160,7 @@ export class AsistenciasService {
     }catch(error){
       this.handleDBErrors(error)
     }
-  }
+  }*/
 
   async updateAsistenciaAlumno(updateAsistenciaDto: UpdateAsistenciaDto) {
     try {
@@ -252,12 +255,13 @@ export class AsistenciasService {
     }
   }
 
-  async obtenerTodasAsistencias(fecha_Inicio:string,fecha_Fin:string,profesor:Profesor){
+  async obtenerTodasAsistencias(reporteAsistencias:reporteAsistenciasDto){
     try {
+      const {fecha_Fin,fecha_Inicio,profesor} = reporteAsistencias;
       const asistencia = await this.asistenciaRepository.find({
         where: {
           fecha: Between(fecha_Inicio,fecha_Fin),
-          profesor
+          profesor: {noEmpleado:Number(profesor)}
         },
         relations:['alumno', 'profesor', 'aula', 'materia'],
       })

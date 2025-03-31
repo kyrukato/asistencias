@@ -308,7 +308,7 @@ export const initialDataMXG:seedDataMateriaXGrupo ={
             fecha_Fin:'2025-06-20',
         },
         {
-            materia:{id:4} as Materia,
+            materia:{id:5} as Materia,
             grupo:{id:25} as Grupo,
             semestre:8,
             profesor:{noEmpleado:9999} as Profesor,
@@ -321,7 +321,7 @@ export const initialDataMXG:seedDataMateriaXGrupo ={
             fecha_Fin:'2025-06-20',
         },
         {
-            materia:{id:4} as Materia,
+            materia:{id:5} as Materia,
             grupo:{id:25} as Grupo,
             semestre:8,
             profesor:{noEmpleado:9999} as Profesor,
@@ -334,7 +334,7 @@ export const initialDataMXG:seedDataMateriaXGrupo ={
             fecha_Fin:'2025-06-20',
         },
         {
-            materia:{id:4} as Materia,
+            materia:{id:5} as Materia,
             grupo:{id:25} as Grupo,
             semestre:8,
             profesor:{noEmpleado:9999} as Profesor,
@@ -347,7 +347,7 @@ export const initialDataMXG:seedDataMateriaXGrupo ={
             fecha_Fin:'2025-06-20',
         },
         {
-            materia:{id:4} as Materia,
+            materia:{id:5} as Materia,
             grupo:{id:25} as Grupo,
             semestre:8,
             profesor:{noEmpleado:9999} as Profesor,

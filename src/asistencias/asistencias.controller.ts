@@ -6,6 +6,7 @@ import { buscarAsistenciasAlumnoDto } from './dto/buscarAsistenciasAlumno.dto';
 import { bucarAsistenciasProfesorDto } from './dto/buscarAsistenciasProfesor.dto';
 import { Aula } from 'src/aula/entities/aula.entity';
 import { Profesor } from 'src/profesor/entities/profesor.entity';
+import { reporteAsistenciasDto } from './dto/reporteAsistencias.dto';
 
 @Controller('asistencias')
 export class AsistenciasController {
@@ -36,24 +37,24 @@ export class AsistenciasController {
     return this.asistenciasService.findByAula(fecha,aula);
   }
 
-  @Get('byprofesor')
+  /*@Get('byprofesor')
   findbyProfesor(@Body() fecha:string, profesor:Profesor) {
     return this.asistenciasService.findByProfesor(fecha,profesor);
-  }
+  }*/
 
-  @Get('byhora')
+  /*@Get('byhora')
   findbyHora(@Body() fecha:string, hora:string) {
     return this.asistenciasService.findByHora(fecha,hora);
-  }
+  }*/
 
-  @Get('bydia')
+  /*@Get('bydia')
   findbyDia(@Body() fecha:string) {
     return this.asistenciasService.findByDia(fecha);
-  }
+  }*/
 
   @Get('reporte')
-  reporteAsistencia(@Body() fecha_Inicio:string, fecha_Fin:string, profesor:Profesor){
-    return this.asistenciasService.obtenerTodasAsistencias(fecha_Inicio,fecha_Fin,profesor)
+  reporteAsistencia(@Body() reporteAsistencias:reporteAsistenciasDto){
+    return this.asistenciasService.obtenerTodasAsistencias(reporteAsistencias)
   }
 
   @Patch('alumno')
