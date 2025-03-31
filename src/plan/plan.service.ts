@@ -104,6 +104,16 @@ export class PlanService {
     }
   }
 
+  async deleteAll(){
+    const query = this.planRepository.createQueryBuilder('plan');
+
+    try{
+      return await query.delete().where({}).execute();
+    } catch (error){
+      this.handleDBErrors(error);
+    }
+  }
+
   private handleDBErrors(error:any){
     if(error.code === '23505'){
       throw new BadRequestException(error.detail);

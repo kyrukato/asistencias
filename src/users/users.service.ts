@@ -27,17 +27,17 @@ export class UsersService {
 
   async create(createUserDto: CreateUserDto) {
     try{
-      const {password, carrera ,NoControl, NoEmpleado, materias, nombre, apellidoMaterno, apellidoPaterno, ...userData} = createUserDto;
+      const {password, carrera ,NoControl, noEmpleado, materias, nombre, apellidoMaterno, apellidoPaterno, ...userData} = createUserDto;
       const user = this.userRepository.create({
         ...userData,
         password: bcrypt.hashSync(password,10)
       });
       await this.userRepository.save(user);
       if(createUserDto.rol === ValidRoles.alumno){
-        this.alumnoService.create({user, nombre, apellidoMaterno, apellidoPaterno, NoControl,carrera})
+        this.alumnoService.create({user, nombre, apellidoMaterno, apellidoPaterno, NoControl,carrera});
       }
       else if(createUserDto.rol === ValidRoles.profesor){
-        this.profesoresService.create({user,nombre,apellidoMaterno,apellidoPaterno,NoEmpleado,materias});
+        this.profesoresService.create({user,nombre,apellidoMaterno,apellidoPaterno,noEmpleado,materias});
       }
       const token = this.getJWToken({id:user.id});
       return{
@@ -153,6 +153,16 @@ export class UsersService {
         token: this.getJWToken({id: usr.id}), //Crear el JWT
       };
     } catch (error) {
+      this.handleDBErrors(error);
+    }
+  }
+  
+  async deleteAll(){
+    const query = this.userRepository.createQueryBuilder('Users');
+
+    try{
+      return await query.delete().where({}).execute();
+    } catch (error){
       this.handleDBErrors(error);
     }
   }

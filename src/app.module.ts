@@ -14,6 +14,7 @@ import { MateriaXgrupoModule } from './materia-xgrupo/materia-xgrupo.module';
 import { AsistenciasModule } from './asistencias/asistencias.module';
 import { AuthModule } from './auth/auth.module';
 import { AppService } from './app.service';
+import { SeedModule } from './seed/seed.module';
 
 
 
@@ -39,6 +40,7 @@ import { AppService } from './app.service';
     MateriaXgrupoModule,
     AsistenciasModule,
     AuthModule,
+    SeedModule,
   ],
   controllers: [],
   providers: [AppService],

@@ -13,7 +13,7 @@ export class ProfesorService {
     private readonly profesorReposiroty:Repository<Profesor>,
   ){}
   create(createProfesorDto: CreateProfesorDto) {
-    this.profesorReposiroty.create(createProfesorDto);
+    this.profesorReposiroty.save(createProfesorDto);
   }
 
   findAll() {

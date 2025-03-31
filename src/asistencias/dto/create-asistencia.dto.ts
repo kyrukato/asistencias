@@ -3,6 +3,7 @@ import { Aula } from "src/aula/entities/aula.entity";
 import { Materia } from "src/materia/entities/materia.entity";
 import { Profesor } from "src/profesor/entities/profesor.entity";
 import { IsDateString, IsNotEmpty, IsNumber, IsString} from 'class-validator';
+import { MateriaXgrupo } from "src/materia-xgrupo/entities/materia-xgrupo.entity";
 
 export class CreateAsistenciaDto {
     @IsNumber()
@@ -34,4 +35,11 @@ export class CreateAsistenciaDto {
     @IsNotEmpty()
     @IsString()
     aula: Aula;
+
+    @IsNotEmpty()
+    @IsString()
+    dia:string;
+
+    @IsNotEmpty()
+    materiaxgrupo:MateriaXgrupo;
   }

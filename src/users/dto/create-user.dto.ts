@@ -1,3 +1,6 @@
+import { Carrera } from "src/carrera/entities/carrera.entity";
+import { Materia } from "src/materia/entities/materia.entity";
+
 export class CreateUserDto {
     user:string;
 
@@ -11,11 +14,11 @@ export class CreateUserDto {
 
     apellidoMaterno:string;
 
-    materias?:string[];
+    materias?:Materia[];
 
     NoControl?:number;
 
-    NoEmpleado?:number;
+    noEmpleado?:number;
 
-    carrera?:string;
+    carrera?:Carrera;
 }

@@ -1,5 +1,7 @@
+
 import { Alumno } from "src/alumno/entities/alumno.entity";
 import { Aula } from "src/aula/entities/aula.entity";
+import { MateriaXgrupo } from "src/materia-xgrupo/entities/materia-xgrupo.entity";
 import { Materia } from "src/materia/entities/materia.entity";
 import { Profesor } from "src/profesor/entities/profesor.entity";
 import { Column, Entity, ManyToOne, PrimaryColumn, PrimaryGeneratedColumn, Timestamp } from "typeorm";
@@ -48,6 +50,13 @@ export class Asistencia {
         {onDelete:'CASCADE',onUpdate:'CASCADE'}
     )
     aula:Aula;
+
+    @ManyToOne(
+        () => MateriaXgrupo,
+        (materiaxgrupo) => materiaxgrupo.id,
+        {onDelete:'CASCADE',onUpdate:'CASCADE'}
+    )
+    materiaxgrupo:MateriaXgrupo;
 
     @Column('bool', {default:null})
     asistencia_Profesor:boolean;

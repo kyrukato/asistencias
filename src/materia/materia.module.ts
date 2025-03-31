@@ -9,6 +9,7 @@ import { Materia } from './entities/materia.entity';
   providers: [MateriaService],
   imports: [
     TypeOrmModule.forFeature([Materia])
-  ]
+  ],
+  exports:[MateriaService]
 })
 export class MateriaModule {}

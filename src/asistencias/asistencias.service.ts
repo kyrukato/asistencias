@@ -1,3 +1,4 @@
+
 import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { CreateAsistenciaDto } from './dto/create-asistencia.dto';
 import { UpdateAsistenciaDto } from './dto/update-asistencia.dto';
@@ -18,20 +19,21 @@ export class AsistenciasService {
   ){}
   async create(createAsistenciaDto: CreateAsistenciaDto) {
     try {
-      const {fecha_Fin, fecha_Inicio, ...data } = createAsistenciaDto;
+      const {fecha_Fin, fecha_Inicio,dia, ...data } = createAsistenciaDto;
       const diasSemana = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+      const diaRegistrado = diasSemana.indexOf(dia);
       let fecha = new Date(fecha_Inicio);
       const fechaFinal = new Date(fecha_Fin);
       while(fecha <= fechaFinal){
-        if((fecha.getDay() !== 0) || (fecha.getDay() !== 6)){
+        if(fecha.getDay() === diaRegistrado){
           const asistencia = this.asistenciaRepository.create({
-            fecha: fecha.toString().split('T')[0],
-            dia: diasSemana[fecha.getDay()],
+            fecha: fecha.toISOString().split('T')[0],
+            dia,
             ...data
           });
           await this.asistenciaRepository.save(asistencia);
-          fecha.setDate(fecha.getDate() +1);
         }
+        fecha.setDate(fecha.getDate() +1);
       }
       return "Registro exitoso";
     } catch (error) {

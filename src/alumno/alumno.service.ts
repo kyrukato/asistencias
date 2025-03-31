@@ -46,6 +46,16 @@ export class AlumnoService {
   remove(id: number) {
     return `This action removes a #${id} alumno`;
   }
+  
+  async deleteAll(){
+    const query = this.alumnoRepository.createQueryBuilder('alumno');
+
+    try{
+      return await query.delete().where({}).execute();
+    } catch (error){
+
+    }
+  }
 
   private handleDBErrors(error:any){
     if(error.code === '23505'){
